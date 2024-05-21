@@ -71,6 +71,34 @@ app.get("/api/:year-:month-:day", function (req, res) {
   }
 });
 
+app.get("/api/:year%20:month%20:day", function (req, res) {
+  try {
+    let queryDate = new Date(
+      +req.params.year,
+      +req.params.month - 1,
+      +req.params.day
+    );
+    const unix = Date.parse(
+      `${req.params.year}-${req.params.month}-${req.params.day}`
+    );
+    console.log(unix);
+    if (isNaN(unix)) {
+      res.json({
+        error: "Invalid Date",
+      });
+    } else {
+      res.json({
+        unix: Number(unix),
+        utc: queryDate.toUTCString(),
+      });
+    }
+  } catch (error) {
+    res.json({
+      error: "Invalid Date",
+    });
+  }
+});
+
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
   console.log("Your app is listening on port " + listener.address().port);
