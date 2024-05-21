@@ -39,22 +39,30 @@ app.get("/api/:unix(\\d{13})", function (req, res) {
 
 app.get("/api/:year(\\d{4})-:month(\\d{2})-:day(\\d{2})", function (req, res) {
   try {
-  let queryDate = new Date(
-    +req.params.year,
-    +req.params.month - 1,
-    +req.params.day
-  );
-  const unix = Date.parse(
-    `${req.params.year}-${req.params.month - 1}-${req.params.day}`
-  );
-  res.json({
-    unix: Number(unix),
-    utc: queryDate.toUTCString(),
-  })} catch(error) {
+    let queryDate = new Date(
+      +req.params.year,
+      +req.params.month - 1,
+      +req.params.day
+    );
+    const unix = Date.parse(
+      `${req.params.year}-${req.params.month}-${req.params.day}`
+    );
+    console.log(unix);
+    if (isNaN(unix)) {
+      res.json({
+        error: "Invalid Date",
+      });
+    } else {
+      res.json({
+        unix: Number(unix),
+        utc: queryDate.toUTCString(),
+      });
+    }
+  } catch (error) {
     res.json({
-      error: "Invalid Date"
-    })
-  };
+      error: "Invalid Date",
+    });
+  }
 });
 
 // Listen on port set in environment variable or default to 3000
