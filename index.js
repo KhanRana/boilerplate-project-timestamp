@@ -39,7 +39,7 @@ app.get("/api/:year(\\d{4})-:month(\\d{2})-:day(\\d{2})", function (req, res) {
   );
   const unix = Date.parse(`${req.params.year}-${req.params.month - 1}-${req.params.day}`);
   res.json({
-    unix : unix,
+    unix : Number(unix),
     utc: queryDate.toUTCString()
   })
 });
