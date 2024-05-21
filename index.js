@@ -24,24 +24,37 @@ app.get("/api/hello", function (req, res) {
 });
 
 app.get("/api/:unix(\\d{13})", function (req, res) {
-  const { unix } = req.params;
-    const myUnixTimestamp = Number(unix); 
-    const myDate = new Date(myUnixTimestamp); 
+  try {
+    const { unix } = req.params;
+    const myUnixTimestamp = Number(unix);
+    const myDate = new Date(myUnixTimestamp);
     const utcDate = myDate.toUTCString();
     res.json({ unix: myUnixTimestamp, utc: utcDate });
+  } catch (error) {
+    res.json({
+      console: "Invalid Date",
+    });
+  }
 });
 
 app.get("/api/:year(\\d{4})-:month(\\d{2})-:day(\\d{2})", function (req, res) {
+  try {
   let queryDate = new Date(
     +req.params.year,
-    +req.params.month -1,
+    +req.params.month - 1,
     +req.params.day
   );
-  const unix = Date.parse(`${req.params.year}-${req.params.month - 1}-${req.params.day}`);
+  const unix = Date.parse(
+    `${req.params.year}-${req.params.month - 1}-${req.params.day}`
+  );
   res.json({
-    unix : Number(unix),
-    utc: queryDate.toUTCString()
-  })
+    unix: Number(unix),
+    utc: queryDate.toUTCString(),
+  })} catch(error) {
+    res.json({
+      error: "Invalid Date"
+    })
+  };
 });
 
 // Listen on port set in environment variable or default to 3000
