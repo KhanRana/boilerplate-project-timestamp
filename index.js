@@ -28,7 +28,7 @@ app.get("/api/:unix(\\d{13})", function (req, res) {
     const myUnixTimestamp = Number(unix); 
     const myDate = new Date(myUnixTimestamp); 
     const utcDate = myDate.toUTCString();
-    res.json({ unix: Number(unix), utc: utcDate });
+    res.json({ unix: myUnixTimestamp, utc: utcDate });
 });
 
 app.get("/api/:year(\\d{4})-:month(\\d{2})-:day(\\d{2})", function (req, res) {
