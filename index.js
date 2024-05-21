@@ -43,7 +43,7 @@ app.get("/api/:unix(\\d{13})", function (req, res) {
   }
 });
 
-app.get("/api/:year(\\d{4})-:month(\\d{2})-:day(\\d{2})", function (req, res) {
+app.get("/api/:year-:month-:day", function (req, res) {
   try {
     let queryDate = new Date(
       +req.params.year,
