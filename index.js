@@ -19,14 +19,10 @@ app.get("/", function (req, res) {
 });
 
 // your first API endpoint...
-app.get("/api/hello", function (req, res) {
-  res.json({ greeting: "hello API" });
-});
-
 app.get("/api", function (req, res) {
   const unix = Date.now();
   const utcDate = new Date(unix).toUTCString();
-  res.json({ unix: Date.now(), utc: utcDate});
+  res.json({ unix: Date.now(), utc: utcDate });
 });
 
 app.get("/api/:unix(\\d{13})", function (req, res) {
@@ -38,66 +34,87 @@ app.get("/api/:unix(\\d{13})", function (req, res) {
     res.json({ unix: myUnixTimestamp, utc: utcDate });
   } catch (error) {
     res.json({
-      console: "Invalid Date",
-    });
-  }
-});
-
-app.get("/api/:year-:month-:day", function (req, res) {
-  try {
-    let queryDate = new Date(
-      +req.params.year,
-      +req.params.month - 1,
-      +req.params.day
-    );
-    const unix = Date.parse(
-      `${req.params.year}-${req.params.month}-${req.params.day}`
-    );
-    console.log(unix);
-    if (isNaN(unix)) {
-      res.json({
-        error: "Invalid Date",
-      });
-    } else {
-      res.json({
-        unix: Number(unix),
-        utc: queryDate.toUTCString(),
-      });
-    }
-  } catch (error) {
-    res.json({
       error: "Invalid Date",
     });
   }
 });
 
-app.get("/api/:year%20:month%20:day", function (req, res) {
-  try {
-    let queryDate = new Date(
-      +req.params.year,
-      +req.params.month - 1,
-      +req.params.day
-    );
-    const unix = Date.parse(
-      `${req.params.year}-${req.params.month}-${req.params.day}`
-    );
-    console.log(unix);
-    if (isNaN(unix)) {
-      res.json({
-        error: "Invalid Date",
-      });
-    } else {
-      res.json({
-        unix: Number(unix),
-        utc: queryDate.toUTCString(),
-      });
-    }
-  } catch (error) {
+app.get("/api/:date", function (req, res) {
+  const url = req.url;
+  console.log(url);
+  console.log(req.params.date);
+  const myDate = new Date(req.params.date).toUTCString();
+  console.log(myDate);
+  if (myDate === "Invalid Date") {
     res.json({
       error: "Invalid Date",
     });
+  } else {
+    res.json({
+      unix: Date.parse(myDate),
+      utc: myDate,
+    });
   }
 });
+
+
+
+// app.get("/api/:year-:month-:day", function (req, res) {
+//   console.log(req.query);
+//   try {
+//     let queryDate = new Date(
+//       +req.params.year,
+//       +req.params.month - 1,
+//       +req.params.day
+//     );
+//     const unix = Date.parse(
+//       `${req.params.year}-${req.params.month}-${req.params.day}`
+//     );
+//     console.log(unix);
+//     if (isNaN(unix)) {
+//       res.json({
+//         error: "Invalid Date",
+//       });
+//     } else {
+//       res.json({
+//         unix: Number(unix),
+//         utc: queryDate.toUTCString(),
+//       });
+//     }
+//   } catch (error) {
+//     res.json({
+//       error: "Invalid Date",
+//     });
+//   }
+// });
+
+// app.get("/api/:year%20:month%20:day", function (req, res) {
+//   try {
+//     let queryDate = new Date(
+//       +req.params.year,
+//       +req.params.month - 1,
+//       +req.params.day
+//     );
+//     const unix = Date.parse(
+//       `${req.params.year}-${req.params.month}-${req.params.day}`
+//     );
+//     console.log(unix);
+//     if (isNaN(unix)) {
+//       res.json({
+//         error: "Invalid Date",
+//       });
+//     } else {
+//       res.json({
+//         unix: Number(unix),
+//         utc: queryDate.toUTCString(),
+//       });
+//     }
+//   } catch (error) {
+//     res.json({
+//       error: "Invalid Date",
+//     });
+//   }
+// });
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
